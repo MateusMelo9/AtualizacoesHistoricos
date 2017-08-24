@@ -1,0 +1,60 @@
+/*
+####################
+	UTILIDADES
+####################
+*/
+.my-glyphicon-large{
+	font-size: 20px;
+}
+/*
+####################
+	COMPONENTES
+####################
+*/
+/*Field Action*/
+
+.my-field-action{
+	display: flex;
+}
+
+.my-field-action_icon{
+	margin: 5px 0 0 5px;	
+}
+
+.my-marg-btn{
+	padding: 10px;
+}
+/*
+Coluna - Pesquisa de hitoricos
+*/
+
+
+.table-historico-col-mod{
+	
+}
+
+.table-historico-col-versao{
+	
+}
+
+.table-historico-col-data{
+	
+}
+
+.table-historico-col-descricao{
+	width: 10px;
+}
+
+.table-historico-col-ops{
+	
+}
+
+.table-historico-col-solicitante{
+	
+}
+.my-table-simple table tr td{
+	border-top: none;
+	border-bottom: 1px solid #e7eaec;
+	padding: 10px;
+	vertical-align: middle;
+}

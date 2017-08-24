@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/vendors.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/historicos.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-datepicker.standalone.min.css}" />
+<title>CFI-Agenda</title>
+</head>
+<body>
+	<div class="aw-layout-page">
+		<nav
+			class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference"
+			id="main-navbar" th:fragment="navbar">
+			<div class="container-fluid">
+	
+				<div class="navbar-header">
+					<a class="navbar-brand  hidden-xs" href="#"> <img
+						alt="logo-icon" src="" />
+					</a>
+	
+					<ul class="nav  navbar-nav">
+						<li><a href="#" class="js-sidebar-toggle"><i
+								class="fa  fa-bars"></i></a></li>
+					</ul>
+				</div>
+	
+				<ul class="nav navbar-nav  navbar-right">
+					<li><a href="#"><em class="fa  fa-sign-out"></em></a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-10">
+						<h1>Históricos/Atualizações</h1>
+					</div>
+					<div class="col-sm-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" href="#">
+								<i class="glyphicon glyphicon-zoom-in"></i><span class="hidden-xs hidden-sm">Pesquisa</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<div class="form-group">
+				<ul class="nav nav-tabs">
+			 		<li role="presentation" ><a th:href="@{/atualizacoes}">Históricos/Atualizações</a></li>
+			  		<li role="presentation" class="active"><a th:href="@{/agendas}">Agenda/Consultor</a></li>
+				</ul>
+			</div>
+			<div class="form-group container-fluid">
+				<form class="form-inline" method="get" th:object="${agendaFilter}">
+					<div class="row">
+						<div class="form-group">
+						    <label for="dataInicio">Periodo:</label>
+						    <input type="text" class="form-control" id="dataInicio" name="dataInicio" th:field="*{dataInicio}"
+						    data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+								data-date-autoclose="true" data-date-today-highlight="false" data-date-start-date="01/01/1950" 
+						   data-date-end-date="01/01/2100" data-date-force-parse="false"/>
+						</div>
+						  
+						<div class="form-group">
+						    <label for="dataFim">à</label>
+							<input type="text" class="form-control" id="dataFim" name="dataFim" th:field="*{dataFim}"
+							data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+							data-date-autoclose="true" data-date-today-highlight = "true" data-date-start-date="01/01/1950" 
+						   data-date-end-date="01/01/2100" data-date-force-parse="false" />
+						</div>
+						
+						<div class="form-group">
+						    <label for="cnome_usuario">Consultor:</label>
+						    <select	id="cnome_usuario" class="form-control" name="cnome_usuario" >
+								<option value="">Selecione consultor</option>
+								<!-- <option th:each="consultor : ${consultores}" th:text="${consultor.cnome_usuario}" th:value="${consultor.cnome_usuario}" th:field="*{cnome_usuario}"></option> -->
+							</select>
+						</div>
+						<div class="form-group">
+						    <label for="cstatus">Situação:</label>
+						    <select	id="cstatus" class="form-control" name="cstatus" >
+								<option value="">Selecione situacao</option>
+								<!-- <option th:each="status : ${situacoes}" th:text="${status.cstatus}" th:value="${status.cstatus}" th:field="*{cstatus}"></option> -->
+							</select>
+						</div>
+						<div class="form-group">
+						    <label for="nid_empresa">Código:</label>
+						    <input type="text" class="form-control" id="nid_empresa" th:field="*{nid_empresa}"/>
+						</div>
+						<div class="form-group">
+						    <label for="cnome_empresa">Titular:</label>
+						    <input type="text" class="form-control" id="cnome_empresa" disabled="true"/>
+						</div>
+						<div class="form-group">
+							<a href="#" data-toggle="modal" data-target="#solicitanteModal">
+								<i class="glyphicon glyphicon-search my-glyphicon-large"></i>
+							</a>
+						</div>
+						
+						<div class="form-group">
+							<button type="submit" class="btn btn-info">Pesquisar</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			
+			<div class="table-responsive my-table-simple">
+				<table class="table table-bordered">
+					<thead>
+						<tr class="bg-primary">
+							<th class="text-center">Agenda</th>
+							<th class="text-center">Dia</th>
+							<th class="text-center">Hora</th>
+							<th class="text-center">Consultor</th>
+							<th class="text-center">Titular</th>
+							<th class="text-center">Histórico</th>
+							<th class="text-center">Situaçãos</th>							
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="agenda : ${agendas}">
+							<td th:text="${{agenda.ddata}}"></td>
+							<td th:text="${agenda.csemana}"></td>
+							<td th:text="${agenda.chora}"></td>
+							<td th:text="${agenda.cnome_usuario}"></td>
+							<td th:text="${agenda.cnome_empresa}"></td>
+							<td th:text="${agenda.cobs}"></td>
+							<td th:text="${agenda.cstatus}"></td>							
+						</tr>
+						<tr>
+	   						<td colspan="7" th:if="${#lists.isEmpty(agendas)}">Nenhum registro foi encontrado</td>
+	   					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	 
+<div th:replace="modal/TitularModal :: modal"></div>	
+<script th:src="@{/layout/javascripts/vendors.min.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker.pt-BR.min.js}"></script>
+<script type="text/javascript">
+	$("#dataInicio").datepicker();
+	$("#dataFim").datepicker();
+</script>
+</body>
+</html>

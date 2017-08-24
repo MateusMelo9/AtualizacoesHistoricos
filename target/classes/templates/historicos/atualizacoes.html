@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta charset="UTF-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/vendors.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/historicos.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-datepicker.standalone.min.css}" />
+
+<title>CFI-Historicos</title>
+
+</head>
+<body>
+	<div class="aw-layout-page">
+		<nav
+			class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference"
+			id="main-navbar" th:fragment="navbar">
+			<div class="container-fluid">
+	
+				<div class="navbar-header">
+					<a class="navbar-brand  hidden-xs" href="#"> <img
+						alt="logo-icon" src="" />
+					</a>
+	
+					<ul class="nav  navbar-nav">
+						<li><a href="#" class="js-sidebar-toggle"><i
+								class="fa  fa-bars"></i></a></li>
+					</ul>
+				</div>
+	
+				<ul class="nav navbar-nav  navbar-right">
+					<li><a href="#"><em class="fa  fa-sign-out"></em></a></li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-10">
+						<h1>Históricos/Atualizações</h1>
+					</div>					
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid">
+			<div class="form-group">
+				<ul class="nav nav-tabs">
+			 		<li role="presentation" class="active"><a th:href="@{/atualizacoes}">Históricos/Atualizações</a></li>
+			  		<li role="presentation"><a th:href="@{/agendas}">Agenda/Consultor</a></li>
+				</ul>
+			</div>
+			<div class="form-group container-fluid">
+				<form class="form-inline" method="get" th:object="${historicoFilter}">
+					<div class="row">
+						<div class="form-group">
+						    <label for="dataInicio">Periodo:</label>
+						    <input type="text" class="form-control" id="dataInicio" name="dataInicio" th:field="*{dataInicio}"
+						    data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+								data-date-autoclose="true" data-date-today-highlight="false" data-date-start-date="01/01/1950" 
+						   data-date-end-date="01/01/2100" data-date-force-parse="false"/>
+						</div>
+						  
+						<div class="form-group">
+						    <label for="dataFim">à</label>
+							<input type="text" class="form-control" id="dataFim" name="dataFim" th:field="*{dataFim}"
+							data-provide="datepicker" data-date-format="dd/mm/yyyy" data-date-language="pt-BR"
+							data-date-autoclose="true" data-date-today-highlight = "true" data-date-start-date="01/01/1950" 
+						   data-date-end-date="01/01/2100" data-date-force-parse="false" />
+						</div>
+						  
+						<div class="form-group">
+						    <label for="modulo">Módulo:</label>
+						    <select	id="modulo" class="form-control" name="modulo" >
+								<option value="">Selecione módulo</option>
+								<option th:each="modulo : ${modulos}" th:text="${modulo.cprograma}" th:value="${modulo.cprograma}" th:field="*{modulo}"></option>
+							</select>
+						</div>
+						<div class="form-group">
+						    <label for="id_empresa">Código:</label>
+						    <input type="text" class="form-control" id="id_empresa" th:field="*{id_empresa}"/>
+						</div>
+						<div class="form-group">
+						    <label for="cnome_empresa">Solicitante:</label>
+						    <input type="text" class="form-control" id="cnome_empresa" disabled="disabled"/>
+						</div>
+						<div class="form-group">
+							<a href="#" data-toggle="modal" data-target="#solicitanteModal">
+								<i class="glyphicon glyphicon-search my-glyphicon-large"></i>
+							</a>
+						</div>
+						
+						<div class="form-group">
+							<button type="submit" class="btn btn-info">Pesquisar</button>
+						</div>
+										  
+					</div>
+				</form>
+			</div>
+			<div class="table-responsive my-table-simple">
+				<table class="table table-bordered">
+					<thead>
+						<tr class="bg-primary">
+							<th class="text-center">Mod.</th>
+							<th class="text-center">Versão</th>
+							<th class="text-center">Data</th>
+							<th class="text-center">Descrição</th>
+							<th class="text-center">Ops</th>
+							<th class="text-center">Solicitante</th>							
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="historico : ${paginas}">
+							<td align="center" th:text="${historico.cprograma}"></td>
+							<td align="center" th:text="${historico.cversao}"></td>
+							<td align="center" th:text="${{historico.ddata}}"></td>
+							<td th:text="${historico.cobs}"  width="40%"></td>
+							<td align="center" th:text="${historico.nid_op}"></td>
+							<td align="center" th:text="${historico.cnome_empresa}"></td>							
+						</tr>
+						<tr th:if="${#lists.isEmpty(paginas)}">
+							<td colspan="7">Nenhum histórico encontrado</td>
+						</tr>
+						<!-- <tr>
+	   						<td colspan="6" th:if="${#lists.isEmpty(paginas.content)}">Nenhum registro foi encontrado</td>
+	   					</tr> -->
+					</tbody>
+				</table>
+				<!-- <div class="col-sm-12 text-center">
+					<nav aria-label="Page navigation">
+					  <ul class="pagination">
+					    <li th:class="${paginas.first} ? disabled">
+					      <a href="#" aria-label="Previous" th:remove="${paginas.first} ? all">
+					        <span aria-hidden="true">&laquo;</span>
+					      </a>
+					    </li >
+					    <th:block th:each="p : ${#numbers.sequence(1, paginas.totalPages)}" th:with="numeroPagina=${p-1}, paginaAtual=${paginas.number} ">
+						    <li th:class="${paginaAtual == numeroPagina} ? active">
+						    	<a th:href="|?page=${numeroPagina}|"><span th:text="${p}"></span></a>
+						    </li>				    
+					    </th:block>
+					    <li th:class="${paginas.last} ? disabled">
+					      <a href="#" aria-label="Next" th:remove="${paginas.last} ? all">
+					        <span aria-hidden="true">&raquo;</span>
+					      </a>
+					    </li>
+					  </ul>
+					</nav>
+				</div> -->
+			</div>
+			<div class="col-sm-12 text-center">
+				<nav>
+					<ul class="pagination pagination-sm">
+						<li>
+							<a href="#"><span>&laquo;</span></a>
+						</li>
+						<li class="active">
+							<a href="?page=0">1</a>
+						</li>
+						<li>
+							<a href="?page=1">2</a>
+						</li>
+						<li>
+							<a href="?page=2">3</a>
+						</li>
+						<li>
+							<a href="#"><span>&raquo;</span></a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+	
+<div th:replace="modal/SolicitanteModal :: modal"></div>	
+<script th:src="@{/layout/javascripts/vendors.min.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker.pt-BR.min.js}"></script>
+<script th:src="@{/js/empresa-modal.js}"></script>
+<script type="text/javascript">
+	$("#dataInicio").datepicker();
+	$("#dataFim").datepicker();
+</script>
+</body>
+</html>
