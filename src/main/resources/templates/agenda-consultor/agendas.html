@@ -1,51 +1,19 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout-padrao">
+
 <head>
-<meta charset="UTF-8"/>
-<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/vendors.min.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.min.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/historicos.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-datepicker.standalone.min.css}" />
-<title>CFI-Agenda</title>
+<title>CFI-Historicos</title>
 </head>
-<body>
-	<div class="aw-layout-page">
-		<nav
-			class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference"
-			id="main-navbar" th:fragment="navbar">
-			<div class="container-fluid">
-	
-				<div class="navbar-header">
-					<a class="navbar-brand  hidden-xs" href="#"> <img
-						alt="logo-icon" src="" />
-					</a>
-	
-					<ul class="nav  navbar-nav">
-						<li><a href="#" class="js-sidebar-toggle"><i
-								class="fa  fa-bars"></i></a></li>
-					</ul>
-				</div>
-	
-				<ul class="nav navbar-nav  navbar-right">
-					<li><a href="#"><em class="fa  fa-sign-out"></em></a></li>
-				</ul>
-			</div>
-		</nav>
-		
+
+<section layout:fragment="conteudo">	
 		<div class="page-header">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-sm-10">
-						<h1>Históricos/Atualizações</h1>
-					</div>
-					<div class="col-sm-2">
-						<div class="aw-page-header-controls">
-							<a class="btn btn-default" href="#">
-								<i class="glyphicon glyphicon-zoom-in"></i><span class="hidden-xs hidden-sm">Pesquisa</span>
-							</a>
-						</div>
+						<h1>Agenda/Consultor</h1>
 					</div>
 				</div>
 			</div>
@@ -78,33 +46,33 @@
 						</div>
 						
 						<div class="form-group">
-						    <label for="cnome_usuario">Consultor:</label>
-						    <select	id="cnome_usuario" class="form-control" name="cnome_usuario" >
+						    <label for="cid_usu">Consultor:</label>
+						    <select	id="cid_usu" class="form-control" name="cid_usu" >
 								<option value="">Selecione consultor</option>
-								<!-- <option th:each="consultor : ${consultores}" th:text="${consultor.cnome_usuario}" th:value="${consultor.cnome_usuario}" th:field="*{cnome_usuario}"></option> -->
+								<option th:each="consultor : ${consultores}" th:text="${consultor.cnome_usuario}" th:value="${consultor.cid_usu}" th:field="*{cid_usu}"></option>
 							</select>
 						</div>
 						<div class="form-group">
 						    <label for="cstatus">Situação:</label>
 						    <select	id="cstatus" class="form-control" name="cstatus" >
-								<option value="">Selecione situacao</option>
-								<!-- <option th:each="status : ${situacoes}" th:text="${status.cstatus}" th:value="${status.cstatus}" th:field="*{cstatus}"></option> -->
+								<option th:each="status : ${situacoes}" th:text="${status}" th:value="${status.descricao}" th:field="*{cstatus}"></option>
 							</select>
 						</div>
 						<div class="form-group">
-						    <label for="nid_empresa">Código:</label>
-						    <input type="text" class="form-control" id="nid_empresa" th:field="*{nid_empresa}"/>
-						</div>
+						    <label for="id_empresa">Código:</label>
+						    <input type="text" class="form-control" id="id_empresa" th:field="*{id_empresa}"/>
+						</div>						
+					</div>
+					<div class="row" style="padding: 10px;">
 						<div class="form-group">
 						    <label for="cnome_empresa">Titular:</label>
-						    <input type="text" class="form-control" id="cnome_empresa" disabled="true"/>
+						    <input type="text" class="form-control" id="cnome_empresa" disabled="disabled"/>
 						</div>
 						<div class="form-group">
 							<a href="#" data-toggle="modal" data-target="#solicitanteModal">
 								<i class="glyphicon glyphicon-search my-glyphicon-large"></i>
 							</a>
-						</div>
-						
+						</div>						
 						<div class="form-group">
 							<button type="submit" class="btn btn-info">Pesquisar</button>
 						</div>
@@ -116,7 +84,10 @@
 				<table class="table table-bordered">
 					<thead>
 						<tr class="bg-primary">
-							<th class="text-center">Agenda</th>
+							<th class="text-center">
+							Agenda
+							<span class="caret"></span>
+							</th>
 							<th class="text-center">Dia</th>
 							<th class="text-center">Hora</th>
 							<th class="text-center">Consultor</th>
@@ -126,7 +97,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="agenda : ${agendas}">
+						<tr th:each="agenda : ${agendas.content}">
 							<td th:text="${{agenda.ddata}}"></td>
 							<td th:text="${agenda.csemana}"></td>
 							<td th:text="${agenda.chora}"></td>
@@ -136,21 +107,35 @@
 							<td th:text="${agenda.cstatus}"></td>							
 						</tr>
 						<tr>
-	   						<td colspan="7" th:if="${#lists.isEmpty(agendas)}">Nenhum registro foi encontrado</td>
+	   						<td colspan="7" th:if="${#lists.isEmpty(agendas.content)}">Nenhum registro foi encontrado</td>
 	   					</tr>
 					</tbody>
 				</table>
 			</div>
+			<div class="col-sm-12 text-center" th:if="${not #lists.isEmpty(agendas.content)}">
+				<nav>
+					<ul class="pagination pagination-sm">
+						<li th:class="${agendas.first} ? disabled">
+							<a th:href="${agendas.urlToPage(agendas.number - 1)}" th:remove="${agendas.first} ? tag"><span>&laquo;</span></a>
+						</li>
+						<th:block th:each="p : ${#numbers.sequence(1, agendas.totalPages)}" th:with="numeroPagina=${p-1}, paginaAtual=${agendas.number} ">
+						    <li th:class="${paginaAtual == numeroPagina} ? active">
+						    	<a th:href="${agendas.urlToPage(numeroPagina)}"><span th:text="${p}"></span></a>
+						    </li>				    
+					    </th:block>							
+						<li th:class="${agendas.last} ? disabled">
+							<a th:href="${agendas.urlToPage(agendas.number + 1)}" th:remove="${agendas.last} ? tag"><span>&raquo;</span></a>
+						</li>
+					</ul>
+				</nav>
+			</div>
 		</div>
-	</div>
+	
+<th:block th:replace="modal/TitularModal :: modal"></th:block>	
 	 
-<div th:replace="modal/TitularModal :: modal"></div>	
-<script th:src="@{/layout/javascripts/vendors.min.js}"></script>
-<script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
-<script th:src="@{/js/bootstrap-datepicker.pt-BR.min.js}"></script>
-<script type="text/javascript">
-	$("#dataInicio").datepicker();
-	$("#dataFim").datepicker();
-</script>
-</body>
+</section>
+<th:block layout:fragment="javascript-extra">	
+	<script th:src="@{/js/handlebars.min.js}"></script>
+	<script th:src="@{/js/empresaModal.js}"></script>
+</th:block>
 </html>

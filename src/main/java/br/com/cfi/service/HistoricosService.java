@@ -34,8 +34,22 @@ public class HistoricosService {
 	@Autowired
 	private HistoricosRepository historicos;
 	//filtroFuncaoOphistorico
-	public List<Ophistorico> filtroFuncao(HistoricosFilter filter){
-		List<Ophistorico> lista = null;	
+	public Page<Ophistorico> filtroFuncao(HistoricosFilter filter, Pageable pageable){
+		List<Ophistorico> lista = null;
+		Page<Ophistorico> pages = null;
+		Random random = new Random();
+		int id = random.nextInt();
+		
+//		System.out.println(id+" "+filter.getDataInicio()+" "+filter.getDataFim()+" "+filter.getModulo()+" "+filter.getId_empresa());
+		historicos.findByXpesquisaFuncaoOphistorico(id, filter.getDataInicio(), filter.getDataFim(), filter.getModulo(), filter.getId_empresa());
+		pages = historicos.findByXpesquisa(id, pageable);
+			
+		
+		return pages;
+	}
+	public List<Ophistorico> filtroFuncaoLista(HistoricosFilter filter){
+		List<Ophistorico> lista = null;
+		Page<Ophistorico> pages = null;
 		Random random = new Random();
 		int id = random.nextInt();
 		
@@ -45,7 +59,7 @@ public class HistoricosService {
 			
 		
 		return lista;
-	}	
+	}
 	
 	public List<Ophistorico> filtroFuncaoSemFilter(){
 		List<Ophistorico> lista = null;	

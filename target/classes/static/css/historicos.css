@@ -52,6 +52,9 @@ Coluna - Pesquisa de hitoricos
 .table-historico-col-solicitante{
 	
 }
+.my-form{
+	margin-bottom: 10px;
+}
 .my-table-simple table tr td{
 	border-top: none;
 	border-bottom: 1px solid #e7eaec;

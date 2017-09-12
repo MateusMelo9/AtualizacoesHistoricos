@@ -4,6 +4,8 @@ package br.com.cfi.repository;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,10 +22,13 @@ public interface HistoricosRepository extends JpaRepository<Ophistorico, Long>{
 	@Query(value="select fw_opPrograma(?1)", nativeQuery=true)
 	public void findByFuncaoCprograma(Integer id);
 	
-	@Query(value="select nid_xpesquisa, cprograma, cversao, cobs, nid_op, ddata,nid_empresa,cnome_empresa from x_pesquisa x where nid=?1 ", nativeQuery=true)
+	@Query(value="select nid_xpesquisa, trim(cprograma) as cprograma, cversao, cobs, nid_op, ddata,nid_empresa,cnome_empresa from x_pesquisa x where nid=?1 ", nativeQuery=true)
 	public List<Ophistorico> findByCprograma(Integer id);
 	
 	@Query(value="select nid_xpesquisa, cprograma, cversao, cobs, nid_op, ddata,nid_empresa,cnome_empresa from x_pesquisa x where x.cnome_empresa like %?1%", nativeQuery = true)
 	public List<Ophistorico> findByCnome_empresaContaining(String cnome_empresa);
+	
+	@Query(value="select nid_xpesquisa, cprograma, cversao, cobs, nid_op, ddata,nid_empresa,cnome_empresa from x_pesquisa xp where xp.nid=?1 \n--#pageable\n", nativeQuery=true)
+	public Page<Ophistorico> findByXpesquisa(Integer id,Pageable pageable);
 	
 }

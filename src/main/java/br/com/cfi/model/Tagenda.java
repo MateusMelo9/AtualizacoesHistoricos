@@ -26,6 +26,7 @@ public class Tagenda {
 		
 		private String Csemana;
 		private String Chora;
+		private String Cid_usu;
 		private String Cnome_usuario;
 		private Integer Nid_empresa;
 		private String Cnome_empresa;
@@ -44,6 +45,12 @@ public class Tagenda {
 		}
 		public void setDdata(Date ddata) {
 			Ddata = ddata;
+		}		
+		public String getCid_usu() {
+			return Cid_usu;
+		}
+		public void setCid_usu(String cid_usu) {
+			Cid_usu = cid_usu;
 		}
 		public String getCsemana() {
 			return Csemana;

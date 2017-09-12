@@ -1,0 +1,92 @@
+.footer-principal{
+	background-color: #ffffff;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+	box-sizing: border-box;
+	width: 100%;
+	text-align: left;
+	font: bold 12px sans-serif;
+	padding: 15px 15px;
+	position: absolute;
+	
+	
+}
+.footer-principal .logo-cfi,
+.footer-principal .footer-left,
+.footer-principal .footer-center,
+.footer-principal .footer-right{
+	display: inline-block;
+	vertical-align: top;
+}
+
+/* Footer logo-cfi */
+.footer-principal .logo-cfi{
+	width: 14%;
+}
+
+.footer-principal .logo-cfi #logo{
+	width: 130px;
+		
+}
+
+/* Footer left */
+.footer-principal .footer-left{
+	width: 30%;
+}
+.footer-principal .footer-dados{
+	color:  #8f9296;
+	padding: 0;
+}
+
+/* Footer Center */
+.footer-principal .footer-center{
+	width: 23%;
+}
+.footer-principal .footer-center p{
+	color:  #8f9296;
+	font-size: 14px;
+	font-weight: normal;	
+}
+
+/* Footer Right */
+.footer-principal .footer-right{
+	width: 22%;
+}
+.footer-principal .footer-redes span{	
+	margin-left: 20px;
+	color:  #8f9296;
+	font-size: 14px;
+	font-weight: bold;	
+}
+.footer-principal .footer-icons{
+	margin-top: 15px;
+	margin-left: 20px;	
+}
+
+a:hover .hover {
+	transform: rotate(360deg);	
+}
+
+.hover {
+    transition: all 0.8s ease;
+}
+/* If you don't want the footer to be responsive, remove these media queries */
+@media (max-width: 880px) {
+
+	.footer-principal{
+		font: bold 14px sans-serif;
+	}
+
+	.footer-principal .footer-left,
+	.footer-principal .footer-center,
+	.footer-principal .footer-right{
+		display: block;
+		width: 100%;
+		margin-bottom: 40px;
+		text-align: center;
+	}
+
+	.footer-principal .footer-center p{
+		margin-left: 0;
+	}
+
+}

@@ -1,42 +1,24 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout-padrao">
+
 <head>
-
-<meta charset="UTF-8"/>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width" />
-
-<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/vendors.min.css}"/>
-<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.min.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/historicos.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-datepicker.standalone.min.css}" />
-
 <title>CFI-Historicos</title>
-
 </head>
-<body>
+
+<section layout:fragment="conteudo">
 	<div class="aw-layout-page">
 		<nav
 			class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference"
 			id="main-navbar" th:fragment="navbar">
-			<div class="container-fluid">
-	
+			<div class="container-fluid">	
 				<div class="navbar-header">
 					<a class="navbar-brand  hidden-xs" href="#"> <img
 						alt="logo-icon" src="" />
-					</a>
-	
-					<ul class="nav  navbar-nav">
-						<li><a href="#" class="js-sidebar-toggle"><i
-								class="fa  fa-bars"></i></a></li>
-					</ul>
-				</div>
-	
-				<ul class="nav navbar-nav  navbar-right">
-					<li><a href="#"><em class="fa  fa-sign-out"></em></a></li>
-				</ul>
+					</a>	
+				</div>	
 			</div>
 		</nav>
 		
@@ -56,8 +38,8 @@
 			  		<li role="presentation"><a th:href="@{/agendas}">Agenda/Consultor</a></li>
 				</ul>
 			</div>
-			<div class="form-group container-fluid">
-				<form class="form-inline" method="get" th:object="${historicoFilter}">
+			<div class="form-group container-fluid my-form">
+				<form class="form-inline my-form" method="get" th:object="${historicoFilter}">
 					<div class="row">
 						<div class="form-group">
 						    <label for="dataInicio">Periodo:</label>
@@ -84,11 +66,11 @@
 						</div>
 						<div class="form-group">
 						    <label for="id_empresa">Código:</label>
-						    <input type="text" class="form-control" id="id_empresa" th:field="*{id_empresa}"/>
+						    <input type="text" class="form-control js-plain" id="id_empresa" th:field="*{id_empresa}"/>
 						</div>
 						<div class="form-group">
 						    <label for="cnome_empresa">Solicitante:</label>
-						    <input type="text" class="form-control" id="cnome_empresa" disabled="disabled"/>
+						    <input type="text" class="form-control" id="cnome_empresa" disabled="disabled" th:field="*{cnome_empresa}"/>
 						</div>
 						<div class="form-group">
 							<a href="#" data-toggle="modal" data-target="#solicitanteModal">
@@ -104,7 +86,7 @@
 				</form>
 			</div>
 			<div class="table-responsive my-table-simple">
-				<table class="table table-bordered">
+				<table class="table table-bordered tablesorter" id="table">
 					<thead>
 						<tr class="bg-primary">
 							<th class="text-center">Mod.</th>
@@ -116,7 +98,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="historico : ${paginas}">
+						<tr th:each="historico : ${paginas.content}">
 							<td align="center" th:text="${historico.cprograma}"></td>
 							<td align="center" th:text="${historico.cversao}"></td>
 							<td align="center" th:text="${{historico.ddata}}"></td>
@@ -124,68 +106,38 @@
 							<td align="center" th:text="${historico.nid_op}"></td>
 							<td align="center" th:text="${historico.cnome_empresa}"></td>							
 						</tr>
-						<tr th:if="${#lists.isEmpty(paginas)}">
+						<tr th:if="${#lists.isEmpty(paginas.content)}">
 							<td colspan="7">Nenhum histórico encontrado</td>
 						</tr>
-						<!-- <tr>
-	   						<td colspan="6" th:if="${#lists.isEmpty(paginas.content)}">Nenhum registro foi encontrado</td>
-	   					</tr> -->
 					</tbody>
 				</table>
-				<!-- <div class="col-sm-12 text-center">
+				 <div class="col-sm-12 text-center" th:if="${not #lists.isEmpty(paginas.content)}">
 					<nav aria-label="Page navigation">
 					  <ul class="pagination">
 					    <li th:class="${paginas.first} ? disabled">
-					      <a href="#" aria-label="Previous" th:remove="${paginas.first} ? all">
-					        <span aria-hidden="true">&laquo;</span>
-					      </a>
+					      <a th:href="${paginas.urlToPage(paginas.number - 1)}" th:remove="${paginas.first} ? tag"><span>&laquo;</span></a>
 					    </li >
 					    <th:block th:each="p : ${#numbers.sequence(1, paginas.totalPages)}" th:with="numeroPagina=${p-1}, paginaAtual=${paginas.number} ">
 						    <li th:class="${paginaAtual == numeroPagina} ? active">
-						    	<a th:href="|?page=${numeroPagina}|"><span th:text="${p}"></span></a>
+						    	<a th:href="${paginas.urlToPage(numeroPagina)}"><span th:text="${p}"></span></a>
 						    </li>				    
 					    </th:block>
 					    <li th:class="${paginas.last} ? disabled">
-					      <a href="#" aria-label="Next" th:remove="${paginas.last} ? all">
-					        <span aria-hidden="true">&raquo;</span>
-					      </a>
+					      <a th:href="${paginas.urlToPage(paginas.number + 1)}" th:remove="${paginas.last} ? tag"><span>&raquo;</span></a>
 					    </li>
 					  </ul>
 					</nav>
-				</div> -->
+				</div>
 			</div>
-			<div class="col-sm-12 text-center">
-				<nav>
-					<ul class="pagination pagination-sm">
-						<li>
-							<a href="#"><span>&laquo;</span></a>
-						</li>
-						<li class="active">
-							<a href="?page=0">1</a>
-						</li>
-						<li>
-							<a href="?page=1">2</a>
-						</li>
-						<li>
-							<a href="?page=2">3</a>
-						</li>
-						<li>
-							<a href="#"><span>&raquo;</span></a>
-						</li>
-					</ul>
-				</nav>
-			</div>
-		</div>
+		</div>			
 	</div>
 	
-<div th:replace="modal/SolicitanteModal :: modal"></div>	
-<script th:src="@{/layout/javascripts/vendors.min.js}"></script>
-<script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
-<script th:src="@{/js/bootstrap-datepicker.pt-BR.min.js}"></script>
-<script th:src="@{/js/empresa-modal.js}"></script>
-<script type="text/javascript">
-	$("#dataInicio").datepicker();
-	$("#dataFim").datepicker();
-</script>
-</body>
+	<th:block th:replace="modal/SolicitanteModal :: modal"></th:block>
+	
+</section>
+<th:block layout:fragment="javascript-extra">	
+	<script th:src="@{/js/handlebars.min.js}"></script>
+	<script th:src="@{/js/empresaModal.js}"></script>
+</th:block>
+
 </html>

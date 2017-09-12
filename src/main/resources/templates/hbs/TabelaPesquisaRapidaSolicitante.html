@@ -1,0 +1,26 @@
+<script id="tabelaSolicitante" type="text/x-handlebars-templates">
+	<div class="table-responsive my-table-simple">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th class="table-historico-col-mod">Cod.</th>
+					<th class="table-historico-col-solicitante">Solicitante</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#if .}}
+					{{#each .}}
+						<tr data-codigo="{{nid_empresa}}" data-nome="{{cnome_empresa}}" class="js-solicitate-pesquisa-modal">
+							<td>{{nid_empresa}}</td>
+							<td>{{cnome_empresa}}</td>
+						</tr>
+					{{/each}}
+				{{else}}
+				<tr>
+	   				<td colspan="6" th:if="${#lists.isEmpty(empresas)}">Nenhum registro foi encontrado</td>
+	   			</tr>
+				{{/if}}
+			</tbody>
+		</table>
+	</div>
+</script>

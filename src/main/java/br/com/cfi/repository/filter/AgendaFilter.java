@@ -13,8 +13,9 @@ public class AgendaFilter {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dataFim = new Date();
 	
+	private String cid_usu = "";
 	private String cnome_usuario = "";
-	private Integer Nid_empresa = 0;
+	private Integer id_empresa = 0;
 	private String cnome_empresa = "";
 	private String Cstatus = "";
 	
@@ -35,6 +36,12 @@ public class AgendaFilter {
 	}
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
+	}	
+	public String getCid_usu() {
+		return cid_usu;
+	}
+	public void setCid_usu(String cid_usu) {
+		this.cid_usu = cid_usu;
 	}
 	public String getCnome_usuario() {
 		return cnome_usuario;
@@ -42,11 +49,11 @@ public class AgendaFilter {
 	public void setCnome_usuario(String cnome_usuario) {
 		this.cnome_usuario = cnome_usuario;
 	}
-	public Integer getNid_empresa() {
-		return Nid_empresa;
+	public Integer getId_empresa() {
+		return id_empresa;
 	}
-	public void setNid_empresa(Integer nid_empresa) {
-		Nid_empresa = nid_empresa;
+	public void setId_empresa(Integer id_empresa) {
+		this.id_empresa = id_empresa;
 	}
 	public String getCnome_empresa() {
 		return cnome_empresa;
